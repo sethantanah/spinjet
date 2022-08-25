@@ -1,0 +1,23 @@
+
+
+<ion-content [fullscreen]="true">
+<ion-searchbar class="searchbar" mode="ios"></ion-searchbar>
+<ion-toolbar>
+  <div class="button-bar">
+    <ion-button size="small" *ngFor="let btn of featuredItems; let i = index"
+    [color]="btn.selected ? 'primary': 'medium'"
+    [fill]="btn.selected ? 'solid': 'outline'"
+    (click)="featuredItems[i].selected = !featuredItems[i].selected;"
+    >
+         {{btn.name}}
+    </ion-button>
+  </div>
+
+</ion-toolbar>
+  <ion-list>
+    <ion-card class="app-card" *ngFor="let item of featuredItems">
+      <img [src]="item.image" alt="">
+      <div class="app-text">{{item.name}}</div>
+    </ion-card>
+  </ion-list>
+</ion-content>

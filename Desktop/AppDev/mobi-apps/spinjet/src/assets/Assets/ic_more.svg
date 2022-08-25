@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+  <g id="ic_more" transform="translate(-322 -413)">
+    <g id="cotainer" transform="translate(324 415)" fill="#f7f7f8" stroke="#11a683" stroke-width="2">
+      <rect width="30" height="30" rx="7" stroke="none"/>
+      <rect x="-1" y="-1" width="32" height="32" rx="8" fill="none"/>
+    </g>
+    <path id="ic_more_24px" d="M6,10a2,2,0,1,0,2,2A2.006,2.006,0,0,0,6,10Zm12,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,18,10Zm-6,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,12,10Z" transform="translate(351 418) rotate(90)" fill="#11a683"/>
+  </g>
+</svg>

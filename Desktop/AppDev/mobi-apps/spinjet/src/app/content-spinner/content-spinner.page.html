@@ -1,0 +1,307 @@
+<ion-content [fullscreen]="true">
+
+  <div class="main-container" (click)="deactivateIgnore();">
+    <div class="word-count" style="display:flex;flex-direction:row; z-index: 0;">
+      <span class="count"> {{content.length}}/10000</span>
+ <div class="options">
+
+<div style="display:flex"  *ngIf="grammarChecking">
+  <span style="margin-top: auto; margin-bottom: auto; font-size: 12px">Grammar checking</span>
+  <ion-spinner color="warning"  name="dots" style=" margin-bottom: auto;
+          margin-top: auto;"></ion-spinner>
+
+</div>
+<ion-spinner color="warning" *ngIf="isLoading" style=" margin-bottom: auto;
+          margin-top: auto;"></ion-spinner>
+
+  <span class="option-refresh" *ngIf="textready" (click)="toggleTextAreas()">
+    <ion-icon name="arrow-back" *ngIf="toogleTextArea"></ion-icon>
+      <ion-icon name="arrow-forward" *ngIf="!toogleTextArea"></ion-icon>
+  </span>
+<!--
+    <span class="option-refresh" *ngIf="textready && toogleTextArea">
+
+      <ion-icon name="pencil"  (click)="editSpinnedText(e)"></ion-icon>
+      <ion-icon name="trash" *ngIf="!toogleTextArea && !editMode" (click)="revertEdit()"></ion-icon>
+      <ion-icon name="book" *ngIf="!toogleTextArea && editMode" (click)="redoEdit()"></ion-icon>
+    </span> -->
+
+
+      <!-- <svg class="option-redo" *ngIf="textready && !toogleTextArea" (click)="redoEdit()" xmlns="http://www.w3.org/2000/svg"
+        width="34" height="34" viewBox="0 0 34 34">
+        <g id="ic_undo" transform="translate(-322 -413)">
+          <g id="cotainer" transform="translate(324 415)" fill="#f7f7f8" stroke="#11a683" stroke-width="2">
+            <rect width="30" height="30" rx="7" stroke="none" />
+            <rect x="-1" y="-1" width="32" height="32" rx="8" fill="none" />
+          </g>
+          <path id="ic_undo_24px"
+            d="M12.5,8a10.464,10.464,0,0,0-6.9,2.6L2,7v9h9L7.38,12.38A7.971,7.971,0,0,1,20.1,16l2.37-.78A10.514,10.514,0,0,0,12.5,8Z"
+            transform="translate(327 419)" fill="#11a683" />
+        </g>
+      </svg> -->
+
+
+      <!-- <ion-icon name="undo" ></ion-icon>
+      <svg  class="option-undo"   *ngIf="textready && !toogleTextArea" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"  (click)="revertEdit()">
+        <g id="ic_redo" transform="translate(-322 -413)">
+          <g id="cotainer" transform="translate(324 415)" fill="#f7f7f8" stroke="#11a683" stroke-width="2">
+            <rect width="30" height="30" rx="7" stroke="none" />
+            <rect x="-1" y="-1" width="32" height="32" rx="8" fill="none" />
+          </g>
+          <path id="ic_redo_24px" d="M18.4,10.6A10.472,10.472,0,0,0,1.54,15.22L3.9,16a7.971,7.971,0,0,1,12.72-3.62L13,16h9V7Z"
+            transform="translate(327.46 419)" fill="#11a683" />
+        </g>
+      </svg> -->
+
+
+
+
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"  (click)="optionsmodel.present()">
+      <g id="ic_more" transform="translate(-322 -413)">
+        <g id="cotainer" transform="translate(324 415)" fill="#f7f7f8" stroke="#11a683" stroke-width="2">
+          <rect width="30" height="30" rx="7" stroke="none" />
+          <rect x="-1" y="-1" width="32" height="32" rx="8" fill="none" />
+        </g>
+        <path id="ic_more_24px"
+          d="M6,10a2,2,0,1,0,2,2A2.006,2.006,0,0,0,6,10Zm12,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,18,10Zm-6,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,12,10Z"
+          transform="translate(351 418) rotate(90)" fill="#11a683" />
+      </g>
+    </svg>
+
+
+
+ </div>
+    </div>
+
+    <!-- <ion-textarea rows="30"  (ngModelChange)="grammerCheck('We be smart. They be smart too. How doo you spel that wurd',true)"  *ngIf="!toogleTextArea && content.length<12" placeholder="Start writing here" [(ngModel)]="content"
+    [ngClass]="{active: content.length>0}"></ion-textarea> -->
+
+
+
+    <div contenteditable="plaintext-only" #divMessages (click)="grammerCheck()" class="spinned-content" id="contentEditor" >
+    
+    </div>
+
+
+
+    <!-- <div class="spinned-content"  *ngIf="toogleTextArea">
+      <span *ngFor="let content of  spinnedContent" style="color:{{content.color}}"  (click)="editSpinnedText(e)">
+{{content.word}}
+      </span>
+    </div> -->
+
+
+
+  </div>
+
+
+   <div class="wrap-space">
+      <div class="spin-text" *ngIf="!toogleTextArea" (click)=" spintext()">
+        Spin text
+      </div>
+
+   </div>
+
+ <div class="wrap-space">
+  <div class="copy-text" *ngIf="toogleTextArea"  (click)="copyText()">
+    Copy
+  </div>
+ </div>
+
+
+
+
+
+
+
+
+
+  <div class="action-bar" *ngIf="content.length<1">
+    <div class="paste-text" (click)="pasteText()">
+      <svg id="ic_content_paste_24px" xmlns="http://www.w3.org/2000/svg" width="16.364" height="20" viewBox="0 0 16.364 20">
+        <path id="ic_content_paste_24px-2" data-name="ic_content_paste_24px"
+          d="M17.545,1.818h-3.8a2.716,2.716,0,0,0-5.127,0h-3.8A1.824,1.824,0,0,0,3,3.636V18.182A1.824,1.824,0,0,0,4.818,20H17.545a1.824,1.824,0,0,0,1.818-1.818V3.636A1.824,1.824,0,0,0,17.545,1.818Zm-6.364,0a.909.909,0,1,1-.909.909A.912.912,0,0,1,11.182,1.818Zm6.364,16.364H4.818V3.636H6.636V6.364h9.091V3.636h1.818Z"
+          transform="translate(-3)" fill="#0d111c" />
+      </svg>
+
+      <span style="color:#1A1E24">Paste text</span>
+    </div>
+
+     <!-- <div class="paste-text">
+    <svg id="ic_file_upload_24px" xmlns="http://www.w3.org/2000/svg" width="16.471" height="20" viewBox="0 0 16.471 20">
+      <path id="ic_file_upload_24px-2" data-name="ic_file_upload_24px"
+        d="M9.706,18.294h7.059V11.235h4.706L13.235,3,5,11.235H9.706ZM5,20.647H21.471V23H5Z" transform="translate(-5 -3)"
+        fill="#0d111c" />
+    </svg>
+      <span>Upload content</span>
+    </div>  -->
+
+
+  </div>
+
+
+
+  <ion-modal trigger="trigger-button" #optionsmodel [swipeToClose]="true" [initialBreakpoint]="0.45"
+    [breakpoints]="[0.50, 0.55, 0.60]"  [handle]="false">
+    <ng-template style="border-radius: 20px;">
+<div class="options-bar" id="options-bar">
+
+
+<div class="paste-text" (click)="toggelCases()">
+  <svg class="casesvg" [ngClass]="{toggleCase:toggelCase}" xmlns="http://www.w3.org/2000/svg" width="29.091"
+    height="16.641" viewBox="0 0 29.091 16.641">
+    <g id="ic_Change_caps" data-name="ic_Change caps" transform="translate(0.723 0.5)">
+      <path id="Union_1" data-name="Union 1"
+        d="M-2468.676-587l-.987-2.814h-4.682l-.979,2.814h-2.184l4.566-12.086h1.884l4.574,12.086Zm-5.08-4.507h3.5l-1.751-5.014ZM-2482.7-587l-1.278-3.641h-6.059L-2491.3-587h-2.825l5.908-15.641h2.438l5.919,15.641Zm-6.574-5.833h4.533l-2.266-6.489Z"
+        transform="translate(2494.128 602.641)" stroke="rgba(0,0,0,0)" stroke-miterlimit="10" stroke-width="1" />
+    </g>
+  </svg>
+
+  <span> Spin capitalized words ({{toggelCase ? 'on':'off'}})</span>
+</div>
+
+
+  <div class="paste-text" (click)="optionsmodel.dismiss();  activateIgnore()">
+  <svg id="ic_filter_list_24px" xmlns="http://www.w3.org/2000/svg" width="22.142" height="20" viewBox="0 0 22.142 20">
+    <path id="ic_filter_list_24px-2" data-name="ic_filter_list_24px"
+      d="M11.611,26h4.921V22.667H11.611ZM3,6V9.333H25.142V6ZM6.69,17.667H21.452V14.333H6.69Z" transform="translate(-3 -6)"
+      fill="#0d111c" />
+  </svg>
+    <span>Ignore words</span>
+  </div>
+
+
+
+  <div class="paste-text"   (click)="optionsmodel.dismiss();  messagemodel.present()">
+<svg   id="ic_message_24px" xmlns="http://www.w3.org/2000/svg"  width="20" height="20" viewBox="0 0 20 20">
+  <path id="ic_message_24px-2" data-name="ic_message_24px"
+    d="M20,2H4A2,2,0,0,0,2.01,4L2,22l4-4H20a2.006,2.006,0,0,0,2-2V4A2.006,2.006,0,0,0,20,2ZM18,14H6V12H18Zm0-3H6V9H18Zm0-3H6V6H18Z"
+    transform="translate(-2 -2)"  fill="#0d111c" />
+</svg>
+
+    <span>Message us</span>
+
+  </div>
+  <div class="paste-text"  (click)="optionsmodel.dismiss();  aboutmodel.present()">
+    <svg id="ic_info_outline_24px" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+      <path id="ic_info_outline_24px-2" data-name="ic_info_outline_24px"
+        d="M11,17h2V11H11ZM12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8-8A8.011,8.011,0,0,1,12,20ZM11,9h2V7H11Z"
+        transform="translate(-2 -2)" fill="#0d111c" />
+    </svg>
+
+    <span>About us</span>
+  </div>
+
+
+  <div class="version">SpinJet v1.2</div>
+
+</div>
+    </ng-template>
+  </ion-modal>
+
+
+
+
+
+    <ion-modal trigger="trigger-button" #aboutmodel [swipeToClose]="true" [initialBreakpoint]="1"
+    [breakpoints]="[1, 1, 1]" [handle]="false">
+    <ng-template style="border-radius: 20px;">
+      <div class="modal-container">
+          <span class="option-refresh"(click)="aboutmodel.dismiss()">
+    <ion-icon name="arrow-back"></ion-icon>
+
+  </span>
+        <div class="heading">
+          <h2>SpinJet</h2>
+          <span>SpinJet v1.2</span>
+        </div>
+
+      <div class="description" >
+        <p>SpinJet helps you rewrite any text into unique plagiarism-free content in seconds. Best rewording tool for everyone, especially content creators such as bloggers.
+
+ </p>
+ <p>Moreover, if you happen to be a student looking for an effective solution to "reword any essay", this AI Powered Mobile
+App is the perfect fit to rewrite that.
+</p>
+<p>
+  We offer one click text rephrase, plagiarism free and grammatically accurate results, and a fresh take on your old
+  content.
+</p>
+
+
+
+
+      </div >
+      </div>
+
+      <div class="footer">
+        <p></p>
+
+       <div class="learn" style="margin-bottom: 15px !important;">
+         <span (click)="share()">Tell a friend</span> <ion-icon (click)="share()" name="share-outline"></ion-icon>
+       </div>
+
+        <div class="learn">
+          <span (click)="desktopVersion()">Use website(or Desktop) version </span>
+          <ion-icon (click)="desktopVersion()" name="open-outline"></ion-icon>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+
+    <ion-modal trigger="trigger-button" #messagemodel [swipeToClose]="true" [initialBreakpoint]="1" [breakpoints]="[1, 1, 1]"  [handle]="false">
+      <ng-template style="border-radius: 20px;">
+        <div class="modal-container">
+          <span class="option-refresh" (click)="messagemodel.dismiss()">
+            <ion-icon name="arrow-back"></ion-icon>
+
+          </span>
+       <ion-textarea [(ngModel)]="message" style="color:#595757;font-weight: bold;" rows="20" placeholder="To receive a reply from us, kindly add your email." ></ion-textarea>
+
+        </div>
+
+        <div class="wrap-space">
+          <div class="spin-text" (click)="sendMessage()" >
+            Send message
+          </div>
+        </div>
+
+      </ng-template>
+    </ion-modal>
+
+
+
+<div class="input-bar"id="input-bar" *ngIf="ignoreActive">
+  <div class="done"(click)="deactivateIgnore();">
+    Done
+  </div>
+
+
+  <div class="words">
+    <div *ngFor="let word of ignorewords" class="paste-text">
+
+      <span>{{word}}</span>
+      <ion-icon name="close-outline" (click)="removeWord(word)"></ion-icon>
+    </div>
+  </div>
+
+
+  <div class="input">
+  <div class="tooltip" style="width: 90%;">
+    <ion-input style="width: 90%;" #word placeholder="Type words to ignore"></ion-input>
+    <div class="tooltiptext">
+      Separate words with a comma
+    </div>
+  </div>
+
+
+    <span class="option-add"  [ngClass]="{addoption: word.value.length>0}" style="" (click)="addWord(word.value);word.value=''">
+      <ion-icon name="add"></ion-icon>
+    </span>
+  </div>
+
+</div>
+</ion-content>

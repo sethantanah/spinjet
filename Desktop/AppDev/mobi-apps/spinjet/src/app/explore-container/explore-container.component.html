@@ -1,0 +1,28 @@
+<div id="container">
+
+<ion-searchbar class="searchbar" mode="ios"></ion-searchbar>
+
+<ion-list class="ion-list">
+  <ion-card class="featured-item" style="background-image: url({{item.image}})" *ngFor="let item of featuredItems">
+  <ion-card-title class="featured-item-text">{{item.name}}</ion-card-title>
+  </ion-card>
+</ion-list>
+
+<div class="main-content">
+
+  <div class="divider">
+ <label for="">Popular tools</label>
+    <ion-icon  name="funnel"></ion-icon>
+  </div>
+
+  <ion-list>
+    <ion-card class="app-card" *ngFor="let item of featuredItems">
+        <img [src]="item.image" alt="">
+        <div class="app-text">{{item.name}}</div>
+      </ion-card>
+  </ion-list>
+  
+</div>
+
+
+</div>
