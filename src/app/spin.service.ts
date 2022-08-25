@@ -17,10 +17,8 @@ export class SpinService {
     private afStore: AngularFireStorage
   ) {}
 
-  spinText(
+  paraphrase(
     words: string = 'the big fox',
-    skipWords = [],
-    spinCaps: boolean = false
   ) {
     const content = words.split('.');
     const body = JSON.stringify({ inputs: content });
@@ -29,7 +27,7 @@ export class SpinService {
       Authorization: 'Bearer ' + environment.apiToken,
     });
 
-    const response = this.http.post(environment.apiUrl, body, {
+    const response = this.http.post(environment.paraphraserAPIURL, body, {
       headers,
       responseType: 'json',
     });

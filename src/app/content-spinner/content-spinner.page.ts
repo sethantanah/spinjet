@@ -1,5 +1,6 @@
 import { GrammerService } from './../grammer.service';
 import { SpinService } from './../spin.service';
+import {  onClickHandler } from '../selection'
 
 import {
   AfterViewInit,
@@ -35,7 +36,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   ignoreActive = false;
   textready = false;
   toogleTextArea = false;
-  toggelCase = false;
+  paraphraseMode = false;
   isLoading = false;
   editMode = false;
   timer: any = 0;
@@ -123,27 +124,46 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
         this.textToarray(this.content, res.toString());
 
     });
-    // this.spinService
-    //   .spinText(this.textProcessing.extractKwords(this.content), this.ignorewords, this.toggelCase)
-    //   .subscribe((res) => {
-    //     //console.log(res[0].sequence)
-
-
-    //     this.textready = true;
-    //     this.isLoading = false;
-    //     window.clearInterval(this.timer);
-    //     this.spinnedContents = this.convertTOString(res, false);
-    //     this.textToarray(this.content, this.convertTOString(res, false));
-    //   });
-
+  
     this.timer = window.setInterval(() => {
       this.presentToast(
         'Unable to connect api, please check your network',
         'wifi'
       );
       window.clearInterval(this.timer);
-    }, 10000);
+    }, 15000);
   }
+
+
+  paraphraseText(){
+      this.spinService
+      .paraphrase(this.content)
+      .subscribe((res) => {
+        
+        this.textready = true;
+        this.isLoading = false;
+        window.clearInterval(this.timer);
+        this.spinnedContents = this.convertTOString(res, true);
+        this.textToarray(this.content, this.convertTOString(res, true));
+      });
+
+      this.timer = window.setInterval(() => {
+        this.presentToast(
+          'Unable to connect api, please check your network',
+          'wifi'
+        );
+        window.clearInterval(this.timer);
+      }, 15000);
+  }
+
+
+
+
+
+
+
+
+
 
   grammerCheck(
     spinnedContent = '',
@@ -404,6 +424,10 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     //Now append the li tag to divMessages div
     this.renderer.appendChild(this.divMessages.nativeElement, mainSpan);
     this.textChangeDelay = true;
+    
+    var sel = window.getSelection();
+sel?.setPosition(this.textarea.childNodes[0], 2);
+event.preventDefault();
   }
 
   textToarray(raw: string, spinned: string) {
@@ -515,8 +539,8 @@ convertTOString(res, isSum){
 
 
 
-  toggelCases() {
-    this.toggelCase = !this.toggelCase;
+  toggelMode() {
+    this.paraphraseMode = !this.paraphraseMode;
   }
 
   copyText() {

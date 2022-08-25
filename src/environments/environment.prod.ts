@@ -14,6 +14,6 @@ export const environment = {
   grammarApiKey: '648f8a99b0mshbb6f6c2762f3dc5p126dbfjsn507c2682e459',
   grammarApiUrl: 'https://grammarbot.p.rapidapi.com/check',
   apiUrl: 'https://api-inference.huggingface.co/models/roberta-large',
-  //'https://api-inference.huggingface.co/models/tuner007/pegasus_paraphrase',
+  paraphraserAPIURL: 'https://api-inference.huggingface.co/models/tuner007/pegasus_paraphrase',
   apiToken: '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'
 };
