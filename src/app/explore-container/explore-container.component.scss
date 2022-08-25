@@ -1,0 +1,84 @@
+
+
+.ion-list{
+  display: flex;
+  width: auto;
+  overflow-x: scroll;
+  margin-bottom: 20px;
+
+
+  .featured-item{
+    flex-shrink: 0;
+  padding: 20px;
+  height: 120px;
+  width: 220px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  .featured-item-text{
+    margin-top: 20%;
+    bottom: auto;
+    left: auto;
+    right: auto;
+  }
+  }
+}
+.ion-list::-webkit-scrollbar{
+   display: none;
+}
+
+.searchbar, input{
+margin-left: 20px;
+ width: 90%;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+  padding: 0;
+  height:  38px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.main-content{
+.divider{
+  padding-left: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 5px;
+  --background:transparent!important;
+  --ion-color-base:transparent !important;
+  display: flex;
+  ion-icon{
+    margin-left: auto;
+    margin-right: 10px;
+    font-size: 20px;
+  }
+}
+
+ion-list{
+display: grid;
+grid-template-columns: auto auto auto;
+overflow-x: scroll;
+margin-bottom: 20px;
+
+
+.app-card{
+   width: 110px;
+box-shadow: none;
+flex-shrink: 0;
+ img{
+    height: 100px;
+    width: 110px;
+    border-radius: 10px;
+ }
+ .app-text{
+   font-size: 15px;
+   color: black;
+    width: 100px;
+ }
+}
+}
+ion-list::-webkit-scrollbar{
+   display: none;
+}
+
+}

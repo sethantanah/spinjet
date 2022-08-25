@@ -1,0 +1,7 @@
+{
+  "name": "Spinjet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

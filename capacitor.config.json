@@ -1,0 +1,6 @@
+{
+	"appId": "io.spinjet.appv1",
+	"appName": "SpinJet",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

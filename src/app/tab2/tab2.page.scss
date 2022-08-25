@@ -1,0 +1,49 @@
+
+.searchbar, input{
+margin-left: 20px;
+ width: 90%;
+  background-color: rgba($color: #000000, $alpha: 0.3);
+  padding: 0;
+  height:  38px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.button-bar{
+display: flex;
+overflow-x: scroll;
+}
+
+.button-bar::-webkit-scrollbar{
+   display: none;
+}
+
+
+ion-list{
+display: grid;
+grid-template-columns: auto auto auto;
+overflow-x: scroll;
+margin-bottom: 20px;
+
+
+.app-card{
+   width: 110px;
+box-shadow: none;
+flex-shrink: 0;
+ img{
+    height: 100px;
+    width: 110px;
+    border-radius: 10px;
+ }
+ .app-text{
+   font-size: 15px;
+   color: black;
+    width: 100px;
+ }
+}
+}
+ion-list::-webkit-scrollbar{
+   display: none;
+}
+
