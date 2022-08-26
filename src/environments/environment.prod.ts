@@ -13,7 +13,13 @@ export const environment = {
   // apiUrl: ' https://calm-sands-71620.herokuapp.com/https://api.spinbot.com',
   grammarApiKey: '648f8a99b0mshbb6f6c2762f3dc5p126dbfjsn507c2682e459',
   grammarApiUrl: 'https://grammarbot.p.rapidapi.com/check',
-  apiUrl: 'https://api-inference.huggingface.co/models/roberta-large',
-  paraphraserAPIURL: 'https://api-inference.huggingface.co/models/tuner007/pegasus_paraphrase',
-  apiToken: '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'
+
+
+  
+
+  spinjetAPIURL: 'https://calm-sands-71620.herokuapp.com/https://spinjet-api.herokuapp.com/incomes',
+  paraphraserAPIURL: 'https://calm-sands-71620.herokuapp.com/https://api-inference.huggingface.co/models/tuner007/pegasus_paraphrase',
+  apiToken: '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',
+
+  appVersion:'v1.2'
 };

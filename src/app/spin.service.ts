@@ -35,11 +35,9 @@ export class SpinService {
     return response;
   }
 
-  sendMessage(msg: string) {
-    this.afs.collection('messages').add({ message: msg }).then();
-  }
 
-  textReplacement(kws, sentenceList) {
+  //Spin service
+  textReplacement(kws, sentenceList, ignorewords) {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -50,15 +48,15 @@ export class SpinService {
       word_strength: 1,
     };
 
-    const url =
-      'https://calm-sands-71620.herokuapp.com/https://spinjet-api.herokuapp.com/incomes';
     const body = JSON.stringify({
       kw: kws,
       sentences: sentenceList,
       options: options,
+      ignore:ignorewords
     });
 
-    const response = this.http.post(url, body, {
+
+    const response = this.http.post(environment.spinjetAPIURL, body, {
       headers,
       responseType: 'json',
     });
@@ -76,4 +74,12 @@ export class SpinService {
   //     mode: 'no-cors'
   //   }
   // );
+
+
+  sendMessage(msg: string) {
+    this.afs.collection('messages').add({ message: msg }).then();
+  }
+
 }
+
+

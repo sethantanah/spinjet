@@ -1,6 +1,6 @@
 import { GrammerService } from './../grammer.service';
 import { SpinService } from './../spin.service';
-import {  onClickHandler } from '../selection'
+import { onClickHandler } from '../selection'
 
 import {
   AfterViewInit,
@@ -55,6 +55,8 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   isSpinned = true;
   grammarChecking = false;
 
+  keepOriginal = false;
+
   constructor(
     private toastCtrl: ToastController,
     private spinService: SpinService,
@@ -76,7 +78,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     this.statusBar.backgroundColorByHexString('#ffffff');
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() { }
 
   activateIgnore() {
     const ignoremodal = document.getElementById('input-bar');
@@ -113,19 +115,13 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   }
 
   spintext() {
-    this.textChangeDelay = false;
-    this.isLoading = true;
-    this.isSpinned = true;
-    this.textProcessing.spinContent(this.content).subscribe(res =>{
-        this.textready = true;
-        this.isLoading = false;
-        window.clearInterval(this.timer);
-        this.spinnedContents = res.toString();
-        this.textToarray(this.content, res.toString());
-
-    });
-  
+    this.spinHandler();
+    let trackTimer = 0;
     this.timer = window.setInterval(() => {
+      trackTimer += 1;
+      if (trackTimer > 3) {
+        this.spinHandler();
+      }
       this.presentToast(
         'Unable to connect api, please check your network',
         'wifi'
@@ -135,25 +131,57 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   }
 
 
-  paraphraseText(){
-      this.spinService
+  spinHandler() {
+    this.textChangeDelay = false;
+    this.isLoading = true;
+    this.isSpinned = true;
+    this.textProcessing.spinContent(this.content, this.ignorewords).subscribe(res => {
+      this.log(res)
+      this.textready = true;
+      this.isLoading = false;
+      this.keepOriginal = true;
+      window.clearInterval(this.timer);
+
+      this.spinnedContents = res.toString();
+      this.textToarray(this.content, res.toString());
+
+    });
+  }
+
+  paraphraseText() {
+    this.paraphraseHandler();
+    let trackTimer = 0;
+    this.timer = window.setInterval(() => {
+      trackTimer += 1;
+      if (trackTimer > 3) {
+        this.paraphraseHandler();
+      }
+      this.presentToast(
+        'Unable to connect api, please check your network',
+        'wifi'
+      );
+      window.clearInterval(this.timer);
+    }, 15000);
+
+
+  }
+
+  paraphraseHandler() {
+    this.textChangeDelay = false;
+    this.isLoading = true;
+    this.isSpinned = true;
+    this.textready = false;
+    this.spinService
       .paraphrase(this.content)
       .subscribe((res) => {
-        
+
         this.textready = true;
         this.isLoading = false;
+        this.keepOriginal = true;
         window.clearInterval(this.timer);
         this.spinnedContents = this.convertTOString(res, true);
         this.textToarray(this.content, this.convertTOString(res, true));
       });
-
-      this.timer = window.setInterval(() => {
-        this.presentToast(
-          'Unable to connect api, please check your network',
-          'wifi'
-        );
-        window.clearInterval(this.timer);
-      }, 15000);
   }
 
 
@@ -170,24 +198,34 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     isSpined = false
   ) {
     this.textarea = document.getElementById('contentEditor');
-    this.content = this.textarea?.innerText;
-    this.textarea.addEventListener('input', () => {
+    if (!this.keepOriginal) {
       this.content = this.textarea?.innerText;
+    }
+    this.textarea.addEventListener('input', () => {
+      if (!this.keepOriginal) {
+        this.content = this.textarea?.innerText;
+
+      }
+
+      
+
       const content = isSpined ? spinnedContent : this.content;
 
 
       if (this.isSpinned && content.length > 10) {
         this.grammarChecking = true;
-     this.grammar.getGrammerCheck(content).subscribe((res) => {
-         this.grammarChecking = false;
-         if(res){
-          this.ignorewordGrammar(res, content, this.ignoreGWords);
-         }
+        this.grammar.getGrammerCheck(content).subscribe((res) => {
+          this.grammarChecking = false;
+          if (res) {
+            this.ignorewordGrammar(res, content, this.ignoreGWords);
+          }
 
-     });
-    }
+        });
+      }
     });
   }
+
+ 
 
   underlineGrammar(content, text: string) {
     this.grammarChecked = [];
@@ -245,7 +283,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     this.isSpinned = false;
   }
 
-  ignorewordGrammar(content, text, customDictionary, changed=false) {
+  ignorewordGrammar(content, text, customDictionary, changed = false) {
     this.textChangeDelay = false;
     this.grammarChecked = [];
     const newText = '';
@@ -270,7 +308,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
         this.grammarChecked.push({
           word: text.slice(cursor, offset),
           wrong: 'none',
-          changed:false,
+          changed: false,
           mistake: false,
         });
         // newText += '**' + errorText + '**';
@@ -284,7 +322,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
             word: errorText,
             wrong: 'text',
             mistake: true,
-            changed:false,
+            changed: false,
             matchs: content.matches[i].replacements,
           });
         } else {
@@ -292,7 +330,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
             word: errorText,
             wrong: 'grm',
             mistake: true,
-            changed:false,
+            changed: false,
             matchs: content.matches[i].replacements,
           });
         }
@@ -307,27 +345,27 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
         word: text.slice(cursor),
         wrong: 'none',
         mistake: false,
-        changed:false,
+        changed: false,
       });
     }
 
     //this.log(this.grammarChecked);
 
     const raw = this.content.split(' ');
-   if(changed){
-    this.grammarChecked.forEach((t) => {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < raw.length; i++) {
-        if (t.word.trim().toLowerCase() === raw[i].trim().toLowerCase()) {
-          //  t.color = '#1A1E24';
-          t.changed = false;
-          break;
-        } else {
-          t.changed = true;
+    if (changed) {
+      this.grammarChecked.forEach((t) => {
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < raw.length; i++) {
+          if (t.word.trim().toLowerCase() === raw[i].trim().toLowerCase()) {
+            //  t.color = '#1A1E24';
+            t.changed = false;
+            break;
+          } else {
+            t.changed = true;
+          }
         }
-      }
-    });
-   }
+      });
+    }
     this.isSpinned = false;
     this.renderDom();
   }
@@ -385,7 +423,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
         this.renderer.setAttribute(subSpan, 'class', 'wText');
       } else if (e.wrong === 'grm' && e.changed === false) {
         this.renderer.setAttribute(subSpan, 'class', 'wGrm');
-      }else if(e.changed === true){
+      } else if (e.changed === true) {
         this.renderer.setAttribute(subSpan, 'class', 'uColor');
       }
 
@@ -424,10 +462,6 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     //Now append the li tag to divMessages div
     this.renderer.appendChild(this.divMessages.nativeElement, mainSpan);
     this.textChangeDelay = true;
-    
-    var sel = window.getSelection();
-sel?.setPosition(this.textarea.childNodes[0], 2);
-event.preventDefault();
   }
 
   textToarray(raw: string, spinned: string) {
@@ -454,10 +488,10 @@ event.preventDefault();
     this.edittableText = this.content;
 
     this.grammar.getGrammerCheck(content).subscribe((res) => {
-     if (content.length > 0) {
+      if (content.length > 0) {
         this.ignorewordGrammar(res, content, this.ignoreGWords, true);
       }
-   });
+    });
 
     this.trackContentChanges.push(content.trim());
     this.trackContentChanges.push(this.content);
@@ -469,7 +503,7 @@ event.preventDefault();
       this.content =
         this.trackContentChanges[this.trackContentChanges.length - 2];
     }
-  this.toggleTextAreas();
+    this.toggleTextAreas();
   }
 
   revertEdit() {
@@ -501,40 +535,42 @@ event.preventDefault();
   }
 
   toggleTextAreas() {
-    this.toogleTextArea = !this.toogleTextArea;
-    if(this.toogleTextArea){
-      // this.textarea.innerText = this.content;
-      //this.textToarray(this.spinnedContents, this.content);
 
-    }else{
-     // this.textToarray(this.content, this.spinnedContents);
-      // this.textarea.innerText = this.spinnedContent;
+
+    if (this.toogleTextArea) {
+      this.textarea.innerText = this.content;
+
+
+    } else {
+      this.textarea.innerText = this.spinnedContents;
+      this.renderDom()
+    }
+    this.toogleTextArea = !this.toogleTextArea;
+
+  }
+
+
+
+  convertTOString(res, isSum) {
+    /// console.log(res)
+    let summary = '';
+    if (res && isSum) {
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
+      for (let i = 0; i < res.length; i++) {
+        summary = summary + ' ' + res[i].generated_text;
+      };
+    } else {
+      res.forEach((item, i) => {
+        const nextSentence = item[3].sequence.split('*');
+
+        //console.log(nextSentence[i])
+        summary = summary + '' + nextSentence[i] + '. ';
+      });
     }
 
+    // console.log(res);
+    return summary.trim().replace('<s>', '').replace('</s>', '').replace('<mask>', '');
   }
-
-
-
-convertTOString(res, isSum){
- /// console.log(res)
-  let summary = '';
-  if(res && isSum){
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for(let i = 0; i < res.length; i++){
-   summary = summary + ' ' + res[i].generated_text;
-         };
-  }else{
-     res.forEach( (item, i) => {
-       const nextSentence = item[3].sequence.split('*');
-
-       //console.log(nextSentence[i])
-       summary = summary + ''+ nextSentence[i]+'. ';
-     });
-  }
-
- // console.log(res);
-   return summary.trim().replace('<s>','').replace('</s>','').replace('<mask>','');
-}
 
 
 
