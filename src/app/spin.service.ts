@@ -77,7 +77,12 @@ export class SpinService {
 
 
   sendMessage(msg: string) {
-    this.afs.collection('messages').add({ message: msg }).then();
+    this.afs.collection('messages').add({message:msg, authid:'FhNBKBherokuappKqXkVherokuappPubEfNh', date: new Date()} ).then();
+  }
+
+  getUpdate(){
+    const update = this.afs.collection('updates').doc('update').get()
+    return update
   }
 
 }

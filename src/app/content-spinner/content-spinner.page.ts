@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { GrammerService } from './../grammer.service';
 import { SpinService } from './../spin.service';
 import { onClickHandler } from '../selection'
@@ -17,6 +18,14 @@ import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { Share } from '@capacitor/share';
 import { documentId } from 'firebase/firestore';
 import { TextProcessingService } from '../text-processing.service';
+
+interface Update
+  {
+    link: String,
+    message: String,
+    version:String
+  }
+
 
 @Component({
   selector: 'app-content-spinner',
@@ -57,6 +66,9 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
 
   keepOriginal = false;
 
+  update: Update;
+  hasupdate = false;
+
   constructor(
     private toastCtrl: ToastController,
     private spinService: SpinService,
@@ -67,11 +79,26 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
 
     private textProcessing: TextProcessingService
   ) {
+
+
     this.res = grammar.res;
+    this.spinService.getUpdate().subscribe( res => {
+      this.update = {
+        link: res.get('link'),
+        message: res.get('message'),
+        version: res.get('version')
+      }
+
+      if(this.update.version === environment.appVersion){
+        this.hasupdate = false;
+      }else{
+        this.hasupdate = true;
+      }
+
+     })
   }
 
   ngOnInit() {
-
     // let status bar overlay webview
     this.statusBar.overlaysWebView(false);
     // set status bar to white
@@ -643,6 +670,10 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   desktopVersion() {
     const url = 'https://ethstudios.net/article-rewriter-tool';
     window.open(url, '_system', 'location=yes');
+  }
+
+  updateApp(url){
+  window.location.href = url;
   }
 
   log(text) {

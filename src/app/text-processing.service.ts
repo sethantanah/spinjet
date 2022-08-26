@@ -50,7 +50,6 @@ export class TextProcessingService {
 
 
 
-console.log(keywords, sentences)
 
 
   const spinnedContent = this.spinService.textReplacement(keywords, sentences, ignorewords);

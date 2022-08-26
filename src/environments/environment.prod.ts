@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyCFqmj2LcppXD5lT9AI18tpfzg4l0AO4Wg',
-    authDomain: 'spinjet-18756.firebaseapp.com',
-    projectId: 'spinjet-18756',
-    storageBucket: 'spinjet-18756.appspot.com',
-    messagingSenderId: '821147206244',
-    appId: '1:821147206244:web:2c846d02fe4b3b8d32d571',
-    measurementId: 'G-4E6RMF24H4'
+    apiKey: "AIzaSyBp-DOQxXUqlF1PC4icu4UkE_Ilz6rli5s",
+    authDomain: "email-list-1ee3d.firebaseapp.com",
+    projectId: "email-list-1ee3d",
+    storageBucket: "email-list-1ee3d.appspot.com",
+    messagingSenderId: "866252144378",
+    appId: "1:866252144378:web:ce1fd5faeec2f9ed269343",
+    measurementId: "G-D53GQ3VDF9"
   },
   // apiKey: 'd9bebfe0900a47a5889839b836d67d5e',
   // apiUrl: ' https://calm-sands-71620.herokuapp.com/https://api.spinbot.com',
@@ -21,5 +21,7 @@ export const environment = {
   paraphraserAPIURL: 'https://calm-sands-71620.herokuapp.com/https://api-inference.huggingface.co/models/tuner007/pegasus_paraphrase',
   apiToken: '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',
 
-  appVersion:'v1.2'
+  messageId:'FhNBKBherokuappKqXkVherokuappPubEfNh',
+
+  appVersion:'v3.1'
 };
