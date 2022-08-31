@@ -1,7 +1,7 @@
 import { environment } from 'src/environments/environment';
 import { GrammerService } from './../grammer.service';
 import { SpinService } from './../spin.service';
-import { onClickHandler } from '../selection'
+import { onClickHandler } from '../selection';
 
 import {
   AfterViewInit,
@@ -21,9 +21,9 @@ import { TextProcessingService } from '../text-processing.service';
 
 interface Update
   {
-    link: String,
-    message: String,
-    version:String
+    link: string;
+    message: string;
+    version: string;
   }
 
 
@@ -163,14 +163,22 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.isSpinned = true;
     this.textProcessing.spinContent(this.content, this.ignorewords).subscribe(res => {
-      this.log(res)
-      this.textready = true;
-      this.isLoading = false;
-      this.keepOriginal = true;
-      window.clearInterval(this.timer);
+      if(res.toString().length > 2){
+        this.textready = true;
+        this.isLoading = false;
+        this.keepOriginal = true;
+        window.clearInterval(this.timer);
 
-      this.spinnedContents = res.toString();
-      this.textToarray(this.content, res.toString());
+        this.spinnedContents = res.toString();
+        this.textToarray(this.content, res.toString());
+      }else{
+        this.presentToast(
+          'Sorry for the delay, pleases try spining again',
+          'info'
+        );
+        //this.spintext();
+      }
+
 
     });
   }
@@ -198,16 +206,23 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.isSpinned = true;
     this.textready = false;
-    this.spinService
-      .paraphrase(this.content)
+    this.textProcessing.paraphraseText(this.content)
       .subscribe((res) => {
-
+       if(res.toString().length > 0){
         this.textready = true;
         this.isLoading = false;
         this.keepOriginal = true;
         window.clearInterval(this.timer);
         this.spinnedContents = this.convertTOString(res, true);
         this.textToarray(this.content, this.convertTOString(res, true));
+       }else{
+        this.presentToast(
+          'Sorry for the delay, please try paraphrasing again',
+          'info'
+        );
+        //this.paraphraseText();
+
+       }
       });
   }
 
@@ -234,7 +249,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
 
       }
 
-      
+
 
       const content = isSpined ? spinnedContent : this.content;
 
@@ -252,7 +267,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
     });
   }
 
- 
+
 
   underlineGrammar(content, text: string) {
     this.grammarChecked = [];
@@ -525,12 +540,14 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
   }
 
   editSpinnedText(e) {
-    // e.stopPropagation();
-    if (this.trackContentChanges.length >= 2) {
-      this.content =
-        this.trackContentChanges[this.trackContentChanges.length - 2];
-    }
-    this.toggleTextAreas();
+    // // e.stopPropagation();
+    // if (this.trackContentChanges.length >= 2) {
+    //   this.content =
+    //     this.trackContentChanges[this.trackContentChanges.length - 2];
+    // }
+    this.keepOriginal = false;
+    this.toogleTextArea = false;
+    this.textarea.innerText = this.content;
   }
 
   revertEdit() {
@@ -570,7 +587,7 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
 
     } else {
       this.textarea.innerText = this.spinnedContents;
-      this.renderDom()
+      this.renderDom();
     }
     this.toogleTextArea = !this.toogleTextArea;
 
@@ -579,24 +596,25 @@ export class ContentSpinnerPage implements OnInit, AfterViewInit {
 
 
   convertTOString(res, isSum) {
+    return res;
     /// console.log(res)
-    let summary = '';
-    if (res && isSum) {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < res.length; i++) {
-        summary = summary + ' ' + res[i].generated_text;
-      };
-    } else {
-      res.forEach((item, i) => {
-        const nextSentence = item[3].sequence.split('*');
+    // let summary = '';
+    // if (res && isSum) {
+    //   // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    //   for (let i = 0; i < res.length; i++) {
+    //     summary = summary + ' ' + res[i].generated_text;
+    //   };
+    // } else {
+    //   res.forEach((item, i) => {
+    //     const nextSentence = item[3].sequence.split('*');
 
-        //console.log(nextSentence[i])
-        summary = summary + '' + nextSentence[i] + '. ';
-      });
-    }
+    //     //console.log(nextSentence[i])
+    //     summary = summary + '' + nextSentence[i] + '. ';
+    //   });
+    // }
 
-    // console.log(res);
-    return summary.trim().replace('<s>', '').replace('</s>', '').replace('<mask>', '');
+    // // console.log(res);
+    // return summary.trim().replace('<s>', '').replace('</s>', '').replace('<mask>', '');
   }
 
 

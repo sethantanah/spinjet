@@ -18,13 +18,13 @@
     <ion-icon name="arrow-back" *ngIf="toogleTextArea"></ion-icon>
       <ion-icon name="arrow-forward" *ngIf="!toogleTextArea"></ion-icon>
   </span>
-<!--
-    <span class="option-refresh" *ngIf="textready && toogleTextArea">
 
-      <ion-icon name="pencil"  (click)="editSpinnedText(e)"></ion-icon>
-      <ion-icon name="trash" *ngIf="!toogleTextArea && !editMode" (click)="revertEdit()"></ion-icon>
-      <ion-icon name="book" *ngIf="!toogleTextArea && editMode" (click)="redoEdit()"></ion-icon>
-    </span> -->
+    <span class="option-refresh" *ngIf="content.length > 0">
+
+      <ion-icon name="create-outline"  (click)="editSpinnedText(e)"></ion-icon>
+      <!-- <ion-icon name="trash" *ngIf="!toogleTextArea && !editMode" (click)="revertEdit()"></ion-icon>
+      <ion-icon name="book" *ngIf="!toogleTextArea && editMode" (click)="redoEdit()"></ion-icon> -->
+    </span>
 
 
       <!-- <svg class="option-redo" *ngIf="textready && !toogleTextArea" (click)="redoEdit()" xmlns="http://www.w3.org/2000/svg"
@@ -307,14 +307,14 @@ App is the perfect fit to rewrite that.
 
 
   
-<ion-popover [isOpen]="hasupdate" #logoutpop>
+<ion-popover [isOpen]="hasupdate" #logoutpop backdropDismiss="false">
   <ng-template>
 <div style="display: flex; flex-direction: column; padding: 1em;">
   <img src="../../assets/icon/icon.png" style="border-radius:50%; margin:auto auto auto auto ;" width="100" height="100" >
 
 
-<div>
-  <p style="font-weight: bold;">Dear User</p>
+<div *ngIf="update?.message.length > 0">
+  <!-- <p style="font-weight: bold;">Dear User</p> -->
   <p>{{update?.message}}</p>
 </div>
 

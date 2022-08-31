@@ -18,16 +18,17 @@ export class SpinService {
   ) {}
 
   paraphrase(
-    words: string = 'the big fox',
+    content: string = 'the big fox',
   ) {
-    const content = words.split('.');
-    const body = JSON.stringify({ inputs: content });
+    // const content = words.split('.');
+    const body = JSON.stringify({ content, action: 'paraphrase'});
 
     const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + environment.apiToken,
+     // Authorization: 'Bearer ' + environment.apiToken,
+     'Content-Type': 'application/json',
     });
 
-    const response = this.http.post(environment.paraphraserAPIURL, body, {
+    const response = this.http.post(environment.spinjetAPIURL, body, {
       headers,
       responseType: 'json',
     });
@@ -51,8 +52,9 @@ export class SpinService {
     const body = JSON.stringify({
       kw: kws,
       sentences: sentenceList,
-      options: options,
-      ignore:ignorewords
+      options,
+      ignore:ignorewords,
+      action: 'spin'
     });
 
 
@@ -81,8 +83,8 @@ export class SpinService {
   }
 
   getUpdate(){
-    const update = this.afs.collection('updates').doc('update').get()
-    return update
+    const update = this.afs.collection('updates').doc('update').get();
+    return update;
   }
 
 }
